@@ -2,7 +2,9 @@ package com.nila.pokedex.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class PokemonModel {
+import java.io.Serializable;
+
+public class PokemonModel implements Serializable {
 
     @SerializedName("name")
     String pokemonName;

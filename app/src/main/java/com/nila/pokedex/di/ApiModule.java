@@ -1,7 +1,10 @@
 package com.nila.pokedex.di;
 
 import com.nila.pokedex.model.PokemonApi;
+import com.nila.pokedex.model.PokemonModel;
 import com.nila.pokedex.model.PokemonService;
+import com.nila.pokedex.view.Constant;
+import com.nila.pokedex.view.PokemonDetailActivity;
 
 import dagger.Module;
 import dagger.Provides;
@@ -12,7 +15,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class ApiModule {
     private static final String BASE_URL = "https://pokeapi.co/api/v2/";
-
 
     @Provides
     public PokemonApi providePokemonApi(){
@@ -28,4 +30,10 @@ public class ApiModule {
     public PokemonService providePokemonService(){
         return PokemonService.getInstance();
     }
+
+    @Provides
+    public String provideName(){
+        return Constant.getPokedexName();
+    }
+
 }

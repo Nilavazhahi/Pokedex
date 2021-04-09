@@ -11,5 +11,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="mercury">#e3e3e3</color>
     <color name="translucent_black_72">#b8999999</color>
+    <color name="bright_turquoise">#FF018786</color>
+    <color name="translucent_bright_turquoise">#FF03DAC5</color>
+
 
 </resources>

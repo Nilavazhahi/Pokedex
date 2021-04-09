@@ -1,6 +1,7 @@
 package com.nila.pokedex.model;
 
 import com.nila.pokedex.di.DaggerApiComponent;
+import com.nila.pokedex.view.Constant;
 
 import java.util.List;
 
@@ -14,6 +15,9 @@ public class PokemonService {
 
     @Inject
     public PokemonApi api;
+
+    @Inject
+    public String name;
 
     private PokemonService(){
         DaggerApiComponent.create().inject(this);
@@ -29,6 +33,10 @@ public class PokemonService {
 
     public Single<PokemonResponse> getPokemonResponse(){
         return api.getPokemonResponse();
+    }
+
+    public Single<PokemonInfoModel> getPokemonInfo(){
+        return api.getPokemonInfo(Constant.getPokedexName());
     }
 
 }

@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nila.pokedex.R;
 import com.nila.pokedex.model.PokemonModel;
@@ -67,7 +68,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        observerViewModel();
+
+        if(Connectivity.isConnected(MainActivity.this)) {
+
+            observerViewModel();
+        }else{
+            Toast.makeText(this,"Check Your Internet Connection", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void observerViewModel() {
@@ -131,5 +138,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        pokemonListAdapter.notifyDataSetChanged();
     }
 }

@@ -1,5 +1,8 @@
 package com.nila.pokedex.view;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.nila.pokedex.R;
@@ -26,13 +30,14 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
     private List<PokemonModel> pokemonsFilteredList;
     public MyFilter mFilter;
 
-    public PokemonListAdapter(List<PokemonModel> pokemons){
+
+    public PokemonListAdapter(List<PokemonModel> pokemons) {
 
         this.pokemons = pokemons;
         pokemonsFilteredList = new ArrayList<>(pokemons);
     }
 
-    public void updatePokemons(List<PokemonModel> pokemonModels){
+    public void updatePokemons(List<PokemonModel> pokemonModels) {
         pokemons.clear();
         pokemons.addAll(pokemonModels);
         notifyDataSetChanged();
@@ -56,18 +61,22 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
         return pokemons.size();
     }
 
+    //method to receive filter operation from MainActivity
     @Override
     public Filter getFilter() {
 
-        if (mFilter == null){
+        if (mFilter == null) {
             pokemonsFilteredList.clear();
             pokemonsFilteredList.addAll(this.pokemons);
-            mFilter = new PokemonListAdapter.MyFilter(this,pokemonsFilteredList);
+            mFilter = new PokemonListAdapter.MyFilter(this, pokemonsFilteredList);
         }
         return mFilter;
     }
 
-    public class PokemonViewHolder extends RecyclerView.ViewHolder{
+    public class PokemonViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.card_view)
+        CardView cardView;
 
         @BindView(R.id.pokemon_name)
         TextView pokemonName;
@@ -87,6 +96,21 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
             pokemonName.setText(pokemonModel.getPokemonName());
             Util.loadImage(pokemonImage, pokemonModel.getImageUrl(), Util.getProgressDrawable(pokemonImage.getContext()));
 
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getLayoutPosition();
+
+                    PokemonModel pokemonModel = (PokemonModel) pokemons.get(pos);
+                    Intent intent = new Intent(v.getContext(), PokemonDetailActivity.class);
+                    Constant.setPokedexName(pokemonModel.getPokemonName());
+                    Bundle b = new Bundle();
+                    b.putSerializable("pokemon", pokemonModel);
+                    intent.putExtras(b);
+                    v.getContext().startActivity(intent);
+
+                }
+            });
         }
     }
 
@@ -108,12 +132,12 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
 
             filteredList.clear();
             final FilterResults results = new FilterResults();
-            if (charSequence.length() == 0){
+            if (charSequence.length() == 0) {
                 filteredList.addAll(originalList);
-            }else {
+            } else {
                 final String filterPattern = charSequence.toString().toLowerCase().trim();
-                for ( PokemonModel pokemonModel : originalList){
-                    if (pokemonModel.getPokemonName().toLowerCase().contains(filterPattern)){
+                for (PokemonModel pokemonModel : originalList) {
+                    if (pokemonModel.getPokemonName().toLowerCase().contains(filterPattern)) {
                         filteredList.add(pokemonModel);
                     }
                 }
@@ -129,7 +153,7 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
 
             pokemonListAdapter.pokemons.clear();
-            pokemonListAdapter.pokemons.addAll((ArrayList<PokemonModel>)filterResults.values);
+            pokemonListAdapter.pokemons.addAll((ArrayList<PokemonModel>) filterResults.values);
             pokemonListAdapter.notifyDataSetChanged();
 
         }

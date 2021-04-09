@@ -9,13 +9,8 @@ public class PokemonResponse {
     private String previous;
     private List<PokemonModel> results;
 
-    public String getCount() {
-        return count;
-    }
 
-    public void setCount(String count) {
-        this.count = count;
-    }
+
 
     public String getNext() {
         return next;
@@ -37,7 +32,5 @@ public class PokemonResponse {
         return results;
     }
 
-    public void setResults(List<PokemonModel> results) {
-        this.results = results;
-    }
+
 }
